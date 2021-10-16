@@ -1,0 +1,13 @@
+
+#other
+.idea
+
+#dependencies
+/node_modules
+
+#production
+/dist
+
+#debug
+yarn-debug.log*
+yarn-error.log*
