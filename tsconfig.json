@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "commonjs",
+    "lib": [
+      "es2019",
+      "dom"
+    ],
+    "baseUrl": ".",
+    "jsx": "react",
+    "noEmit": true,
+    "sourceMap": true,
+    "allowJs": true,
+
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+
+    "paths": {
+      "@src/*": ["./src/*"],
+      "@routes/*": ["./src/renderer/routes/*"],
+      "@components/*": ["./src/renderer/components/*"],
+      "@icons/*": ["./src/renderer/components/icons/*"],
+      "@hooks/*": ["./src/renderer/hooks/*"],
+      "@library/*": ["./src/renderer/library/*"],
+      "@theme/*": ["./src/renderer/theme/*"]
+    }
+  },
+  "include": ["src"]
+}
