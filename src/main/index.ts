@@ -1,29 +1,32 @@
 import { app, BrowserWindow, ipcMain, shell } from "electron";
 import path from "path";
 
-// avoid garbage collection;
+// BrowserWindow Object. avoid garbage collection
 let window: BrowserWindow | null = null;
 
-// single instance lock;
+// Single instance lock. avoid more than one window
 const gotTheLock = app.requestSingleInstanceLock();
 
-const createWindow = () => {
+const createWindow = async () => {
   window = new BrowserWindow({
     width: 320,
     height: 480,
     webPreferences: {
+      // renderer process에서 Node.js를 사용하지않도록 설정 (avoid xss issues)
+      // Node.js 에서 제공하는 fs, 같은걸 쓰고싶으면 main script 에서 handling 하도록 유도
       nodeIntegration: false,
+      // preload scripts를 index.html과 다른 javascript context에서 실행하도록 설정 (security issue)
       contextIsolation: true,
       preload: path.resolve(__dirname, "preload.js"),
     },
   });
 
+  // todo: codes for production level
   if (process.env.NODE_ENV === "development") {
-    window.loadFile("index.html").finally();
-  } else {
-    window.loadFile("./dist/index.html").finally();
+    await window.loadFile("index.html");
   }
 
+  // todo: more ipcMain handlers
   ipcMain.handle("github", async () => {
     return shell.openExternal(
       "https://www.electronjs.org/docs/latest/tutorial/quick-start#recap"
@@ -36,16 +39,15 @@ const createWindow = () => {
 };
 
 if (!gotTheLock) {
+  // if user tried to open more windows
   app.exit();
 } else {
-  app.whenReady().then(() => {
-    // console.log('opened!!');
-    createWindow();
+  app.whenReady().then(async () => {
+    await createWindow();
 
-    app.on("activate", () => {
+    app.on("activate", async () => {
       if (BrowserWindow.getAllWindows().length === 0) {
-        // console.log('opened again!!');
-        createWindow();
+        await createWindow();
       }
     });
   });
