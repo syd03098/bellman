@@ -33,19 +33,24 @@ const getButtonStyles = (variant: Variant) => {
         color: ${({ theme }) => theme.text.bold};
         border: 1px solid ${({ theme }) => theme.border.smoke};
       `;
-    default:
+    case "white":
       return css`
         background-color: ${({ theme }) => theme.button.white};
         color: ${({ theme }) => theme.text.plain};
         border: 1px solid ${({ theme }) => theme.border.white};
       `;
+    default:
+      return css``;
   }
 };
 
 type ButtonProps = Partial<BaseProps> & ReakitButtonProps;
 
 const Button = forwardRef<HTMLButtonElement, PropsWithChildren<ButtonProps>>(
-  ({ children, variant = "white", size = "sm", ...rest }, ref): JSX.Element => {
+  (
+    { children, variant = "default", size = "sm", ...rest },
+    ref
+  ): JSX.Element => {
     return (
       <StyledButton ref={ref} variant={variant} size={size} {...rest}>
         {children}
@@ -61,6 +66,7 @@ const StyledButton = styled(ReakitButton)<BaseProps>`
   align-items: center;
   justify-content: center;
   user-select: none;
+  white-space: nowrap;
 
   font-size: ${({ size }) => buttonSize[size].fontSize}px;
   font-weight: 500;
@@ -73,6 +79,6 @@ const StyledButton = styled(ReakitButton)<BaseProps>`
 
   &:disabled {
     cursor: default;
-    opacity: 0.5;
+    opacity: 0.3;
   }
 `;
