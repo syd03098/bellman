@@ -181,7 +181,7 @@ const globalStyle = css`
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     color: ${({ theme }) => theme.text.plain};
-    background-color: ${({ theme }) => theme.color.background};
+    background-color: ${({ theme }) => theme.layout.background};
   }
 `;
 

@@ -1,12 +1,10 @@
 // 팔레트, 주로 사용하게될 색상들
 export interface Theme {
-  color: {
+  layout: {
     // background 컬러
     background: string;
     // 하단 footer의 배경색
     subHeader: string;
-    // 주로 button의 border 색깔
-    border: string;
   };
   text: {
     // 강조 text
@@ -20,9 +18,14 @@ export interface Theme {
     // 하늘색 text
     blue: string;
   };
+  border: {
+    white: string;
+    smoke: string;
+    primary: string;
+  };
   button: {
-    // 무색 버튼 배경색
-    default: string;
+    // 흰색 버튼 배경
+    white: string;
     // 연한 gray색 버튼 배경
     smoke: string;
     // primary(짙은 파랑) 버튼 배경

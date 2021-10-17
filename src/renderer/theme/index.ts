@@ -1,10 +1,9 @@
 import { Theme } from "@theme/types";
 
 export const lightTheme: Theme = {
-  color: {
-    background: "#ffffff",
-    subHeader: "#24292f",
-    border: "#d5d8da",
+  layout: {
+    background: "#f3f6f9",
+    subHeader: "#ffffff",
   },
   text: {
     bold: "#000000",
@@ -13,8 +12,13 @@ export const lightTheme: Theme = {
     primary: "#ffffff",
     blue: "#58a6ff",
   },
+  border: {
+    white: "#d0d7de",
+    smoke: "#cfd6dd",
+    primary: "#1062d6",
+  },
   button: {
-    default: "#ffffff",
+    white: "#ffffff",
     smoke: "#f6f8fa",
     primary: "#0088ff",
   },
