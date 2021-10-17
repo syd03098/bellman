@@ -17,7 +17,7 @@
     "strictNullChecks": true,
 
     "moduleResolution": "node",
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": false,
     "esModuleInterop": true,
 
     "paths": {

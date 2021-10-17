@@ -23,7 +23,7 @@ module.exports = {
       "@src": path.resolve(__dirname, "./src"),
       "@routes": path.resolve(__dirname, "./src/renderer/routes"),
       "@components": path.resolve(__dirname, "./src/renderer/components"),
-      "@icons": path.resolve(__dirname, "./src/components/renderer/icons"),
+      "@icons": path.resolve(__dirname, "./src/renderer/components/icons"),
       "@library": path.resolve(__dirname, "./src/renderer/library"),
       "@hooks": path.resolve(__dirname, "./src/renderer/hooks"),
       "@theme": path.resolve(__dirname, "./src/renderer/theme"),
