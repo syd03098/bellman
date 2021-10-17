@@ -1,6 +1,6 @@
 import React from "react";
-import styled from "@theme/styled";
 import Button from "@components/button";
+import styled from "styled-components";
 
 const SubToolbar = (): JSX.Element => {
   return (

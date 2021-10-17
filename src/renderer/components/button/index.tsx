@@ -3,9 +3,8 @@ import {
   Button as ReakitButton,
   ButtonProps as ReakitButtonProps,
 } from "reakit";
-import styled from "@theme/styled";
 import { BaseProps, Size, Variant } from "@components/button/types";
-import { css } from "styled-components";
+import styled, { css } from "styled-components";
 
 const buttonSize: Readonly<Record<Size, { fontSize: number; height: number }>> =
   {
