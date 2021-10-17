@@ -1,6 +1,6 @@
-import { Theme } from "@theme/types";
+import { DefaultTheme } from "styled-components";
 
-export const lightTheme: Theme = {
+export const lightTheme: DefaultTheme = {
   layout: {
     background: "#f3f6f9",
     subHeader: "#ffffff",
