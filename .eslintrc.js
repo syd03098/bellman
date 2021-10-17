@@ -23,6 +23,7 @@ module.exports = {
     "react-hooks/rules-of-hooks": "error",
     "react/jsx-filename-extension": "off",
     "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off",
     "no-console": "off",
     "no-use-before-define": "off",
     "import/no-unresolved": "off",
