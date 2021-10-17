@@ -1,9 +1,11 @@
 import { SetStateAction, Dispatch } from "react";
+import { PathType } from "@library/path";
 
 export interface AppStates {
+  pathName: PathType;
   isActivated: boolean;
   settings: Settings;
-  history: Result[];
+  result: Result[];
   setSettings: Dispatch<SetStateAction<Settings>>;
 }
 
