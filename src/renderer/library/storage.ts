@@ -1,4 +1,4 @@
-import { Settings } from "@library/types";
+import { Settings } from "@library/settings";
 
 export const settingsKey = "settings";
 
@@ -13,6 +13,7 @@ export const loadStorage = (key: string): any => {
   console.log("savedSettings:", stringifiedSettings);
 
   if (!stringifiedSettings) {
+    console.error("no saved localStorage settings:", `'${key}'`);
     return {};
   }
 
