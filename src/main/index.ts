@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from "electron";
+import { app, BrowserWindow, ipcMain, shell, Menu } from "electron";
 import path from "path";
 
 // BrowserWindow Object. avoid garbage collection
@@ -26,11 +26,33 @@ const createWindow = async () => {
     await window.loadFile("index.html");
   }
 
-  // todo: more ipcMain handlers
+  // dummy handler for debug
   ipcMain.handle("github", async () => {
     return shell.openExternal(
       "https://www.electronjs.org/docs/latest/tutorial/quick-start#recap"
     );
+  });
+
+  // Main handlers
+  ipcMain.on("show-interval-options-dropdown", (event, args) => {
+    const { options, selectedValue } = args;
+
+    const menu = Menu.buildFromTemplate([
+      ...options.map((option: { title: string; value: number }) => {
+        return {
+          label: option.title,
+          checked: option.value === selectedValue,
+          click: (): void =>
+            window?.webContents.send("interval-options-dropdown-response", {
+              title: option.title,
+              value: option.value,
+            }),
+          type: "checkbox",
+        };
+      }),
+    ]);
+
+    menu.popup();
   });
 
   window.on("closed", () => {
