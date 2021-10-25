@@ -5,6 +5,9 @@ contextBridge.exposeInMainWorld("electronOnly", {
   showIntervalOptionsDropdown: (args: any): void =>
     ipcRenderer.send("show-interval-options-dropdown", args),
 
+  openExternalCanvas: async (): Promise<void> =>
+    ipcRenderer.invoke("open-external-canvas"),
+
   addGenericIpcListener: <T>(
     channel: string,
     listener: (e: Event, props: T) => void
