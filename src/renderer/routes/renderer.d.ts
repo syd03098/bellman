@@ -10,6 +10,8 @@ export interface ElectronOnly {
   github: () => Promise<void>;
   showIntervalOptionsDropdown: (args: any) => void;
 
+  openExternalCanvas: () => Promise<void>;
+
   addGenericIpcListener: <T>(
     channel: string,
     listener: (e: Event, props: T) => void

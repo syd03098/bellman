@@ -1,5 +1,6 @@
-import { app, BrowserWindow, ipcMain, shell, Menu } from "electron";
+import { app, BrowserWindow, ipcMain, Menu } from "electron";
 import path from "path";
+import createCanvasWindow from "./canvas";
 
 // BrowserWindow Object. avoid garbage collection
 let window: BrowserWindow | null = null;
@@ -26,13 +27,6 @@ const createWindow = async () => {
     await window.loadFile("index.html");
   }
 
-  // dummy handler for debug
-  ipcMain.handle("github", async () => {
-    return shell.openExternal(
-      "https://www.electronjs.org/docs/latest/tutorial/quick-start#recap"
-    );
-  });
-
   // Main handlers
   ipcMain.on("show-interval-options-dropdown", (event, args) => {
     const { options, selectedValue } = args;
@@ -55,13 +49,16 @@ const createWindow = async () => {
     menu.popup();
   });
 
+  ipcMain.handle("open-external-canvas", async () => {
+    await createCanvasWindow();
+  });
+
   window.on("closed", () => {
     window = null;
   });
 };
 
 if (!gotTheLock) {
-  // if user tried to open more windows
   app.exit();
 } else {
   app.whenReady().then(async () => {
