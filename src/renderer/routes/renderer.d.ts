@@ -8,7 +8,6 @@ declare global {
 
 export interface ElectronOnly {
   github: () => Promise<void>;
-  showIntervalOptionsDropdown: (args: any) => void;
 
   openExternalCanvas: () => Promise<void>;
 

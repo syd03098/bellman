@@ -2,8 +2,6 @@ import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("electronOnly", {
   github: async (): Promise<void> => ipcRenderer.invoke("github"),
-  showIntervalOptionsDropdown: (args: any): void =>
-    ipcRenderer.send("show-interval-options-dropdown", args),
 
   openExternalCanvas: async (): Promise<void> =>
     ipcRenderer.invoke("open-external-canvas"),

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from "path";
 import createCanvasWindow from "./canvas";
 
@@ -26,28 +26,6 @@ const createWindow = async () => {
   if (process.env.NODE_ENV === "development") {
     await window.loadFile("index.html");
   }
-
-  // Main handlers
-  ipcMain.on("show-interval-options-dropdown", (event, args) => {
-    const { options, selectedValue } = args;
-
-    const menu = Menu.buildFromTemplate([
-      ...options.map((option: { title: string; value: number }) => {
-        return {
-          label: option.title,
-          checked: option.value === selectedValue,
-          click: (): void =>
-            window?.webContents.send("interval-options-dropdown-response", {
-              title: option.title,
-              value: option.value,
-            }),
-          type: "checkbox",
-        };
-      }),
-    ]);
-
-    menu.popup();
-  });
 
   ipcMain.handle("open-external-canvas", async () => {
     await createCanvasWindow();
