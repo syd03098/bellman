@@ -8,7 +8,7 @@ const SettingsRoute = (): JSX.Element => {
 
   return (
     <Wrap>
-      <IntervalSelectSection settings={settings.interval} />
+      <IntervalSelectSection interval={settings.interval} />
     </Wrap>
   );
 };

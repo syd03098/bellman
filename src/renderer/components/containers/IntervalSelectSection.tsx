@@ -1,66 +1,61 @@
-import React, { useCallback, MouseEvent, useMemo } from "react";
-import { defaultIntervalOptions, Interval } from "@library/settings";
+import React, { useCallback, useMemo } from "react";
 import { useAppContext } from "@components/Context";
 import { Nullable } from "@library/global";
+import { useMenuState } from "reakit/Menu";
 import styled from "styled-components";
-import ReactSelect from "@components/ReactSelect";
-import useIpcListener from "@hooks/useIpcListener";
+import ReactSelect from "@components/select";
 
 interface Props {
-  settings: Nullable<Interval>;
+  interval: Nullable<number>;
 }
 
-const { electronOnly } = window;
+const IntervalSelectSection = ({ interval }: Props): JSX.Element => {
+  const { setSettings, intervalOptions } = useAppContext();
+  const selectProps = useMenuState({ placement: "bottom-end" });
 
-const IntervalSelectSection = ({ settings }: Props): JSX.Element => {
-  const { setSettings } = useAppContext();
+  const selectedValue = intervalOptions.find(
+    ({ value }) => value === interval
+  )?.value;
 
-  const options = useMemo(() => [...defaultIntervalOptions], []);
-  const selectedValue = options
-    .map((option) => option.value)
-    .find((minutes) => minutes === settings?.value);
-
-  const title = useMemo(() => {
-    return "알람 간격";
-  }, []);
-
-  const selectContents = useMemo(() => {
-    if (settings === null) {
-      return "select...";
-    }
-    return <>{settings.title}</>;
-  }, [settings]);
-
-  const onResponse = useCallback(
-    (event: Event, value: Interval) => {
+  const onClick = useCallback(
+    (value: number) => {
       setSettings((prev) => {
         return { ...prev, interval: value };
       });
+
+      selectProps.hide();
     },
-    [setSettings]
+    [selectProps, setSettings]
   );
 
-  const onSelectHandler = useCallback(
-    (e: MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
+  const selectContents = useMemo(() => {
+    if (interval === null) {
+      return "select...";
+    }
 
-      electronOnly.showIntervalOptionsDropdown({
-        options,
-        selectedValue,
-      });
-    },
-    [options, selectedValue]
-  );
+    const displayName = intervalOptions.find(
+      ({ value }) => value === interval
+    )?.title;
 
-  useIpcListener({
-    channel: "interval-options-dropdown-response",
-    listener: onResponse,
-  });
+    return <>{displayName ?? "select..."}</>;
+  }, [interval, intervalOptions]);
 
   return (
     <Section>
-      <Title>{title}</Title>
-      <ReactSelect onSelect={onSelectHandler}>{selectContents}</ReactSelect>
+      <Title>알람간격</Title>
+      <ReactSelect
+        useMenuState={selectProps}
+        options={intervalOptions.map(({ value, title: displayValue }) => {
+          return {
+            value,
+            displayValue,
+          };
+        })}
+        selected={selectedValue}
+        onChanged={onClick}
+      >
+        {selectContents}
+      </ReactSelect>
     </Section>
   );
 };

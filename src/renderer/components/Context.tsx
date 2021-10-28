@@ -3,12 +3,18 @@ import React, {
   ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { AppStates, Result } from "@library/types";
 import { useLocation } from "react-router-dom";
 import { PathMap, PathRawName } from "@library/path";
-import { defaultSettings, Settings } from "@library/settings";
+import {
+  defaultIntervalOptions,
+  defaultSettings,
+  Interval,
+  Settings,
+} from "@library/settings";
 import { loadStorage, saveStorage, settingsKey } from "@library/storage";
 
 export const AppContext = createContext<AppStates | null>(null);
@@ -28,8 +34,15 @@ export const AppContextProvider = ({
 
   // todo: handling isActivated value;
   const [isActivated, setActivated] = useState<boolean>(false);
+
   // working on it
   const [settings, setSettings] = useState<Settings>(initialSettings);
+
+  const intervalOptions: Readonly<Interval[]> = useMemo(
+    () => [...defaultIntervalOptions],
+    []
+  );
+
   // todo: handling result value;
   const [result, setResult] = useState<Result[]>([]);
 
@@ -42,6 +55,7 @@ export const AppContextProvider = ({
       value={{
         pathName,
         isActivated,
+        intervalOptions,
         settings,
         result,
         setSettings,

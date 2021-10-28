@@ -1,11 +1,12 @@
 import { SetStateAction, Dispatch } from "react";
 import { PathType } from "@library/path";
-import { Exercise, Settings } from "@library/settings";
+import { Exercise, Interval, Settings } from "@library/settings";
 
 export interface AppStates {
   pathName: PathType;
   isActivated: boolean;
   settings: Settings;
+  intervalOptions: Readonly<Interval[]>;
   result: Result[];
   setSettings: Dispatch<SetStateAction<Settings>>;
 }

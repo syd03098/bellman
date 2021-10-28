@@ -1,7 +1,7 @@
 import { Nullable } from "@library/global";
 
 export interface Settings {
-  interval: Nullable<Interval>;
+  interval: Nullable<number>;
   playSound: boolean;
   courses: ExerciseCourse[];
 }
