@@ -8,6 +8,7 @@ import Button from "@components/button";
 import styled from "styled-components";
 import CourseEditPopover from "@components/CourseEditPopover";
 import CourseList from "@components/containers/CourseList";
+import { flexSpaceBetween } from "@library/styleFunctions";
 
 const CoursePopover = (): JSX.Element => {
   const { courseOptions, pushCourse } = useAppContext();
@@ -65,11 +66,10 @@ const FlexFull = styled.section`
 `;
 
 const Top = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  ${flexSpaceBetween};
+
+  padding-top: 24px;
+  padding-bottom: 16px;
 `;
 
 const Title = styled.h3`
@@ -77,6 +77,7 @@ const Title = styled.h3`
   font-weight: 500;
   color: ${({ theme }) => theme.text.bold};
   margin: 0;
+  user-select: none;
 `;
 
 export default CoursePopover;

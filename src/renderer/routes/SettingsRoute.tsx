@@ -3,6 +3,7 @@ import { useAppContext } from "@components/Context";
 import IntervalSelectSection from "@components/containers/IntervalSelectSection";
 import CoursePopover from "@components/containers/CoursePopover";
 import styled from "styled-components";
+import ToggleSoundSection from "@components/containers/ToggleSoundSection";
 
 const SettingsRoute = (): JSX.Element => {
   const { settings } = useAppContext();
@@ -10,6 +11,7 @@ const SettingsRoute = (): JSX.Element => {
   return (
     <Wrap>
       <IntervalSelectSection interval={settings.interval} />
+      <ToggleSoundSection isPlaySound={settings.playSound} />
       <CoursePopover />
     </Wrap>
   );

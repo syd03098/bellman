@@ -3,6 +3,7 @@ import { useAppContext } from "@components/Context";
 import { Nullable } from "@library/global";
 import { useMenuState } from "reakit/Menu";
 import { SelectOption } from "@components/select/types";
+import { flexSpaceBetween } from "@library/styleFunctions";
 import styled from "styled-components";
 import ReactSelect from "@components/select";
 
@@ -55,11 +56,9 @@ const IntervalSelectSection = ({ interval }: Props): JSX.Element => {
 };
 
 const Section = styled.section`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  ${flexSpaceBetween};
+
   padding-top: 8px;
-  padding-bottom: 8px;
 `;
 
 const Title = styled.h3`
@@ -67,6 +66,7 @@ const Title = styled.h3`
   font-weight: 500;
   color: ${({ theme }) => theme.text.bold};
   margin: 0;
+  user-select: none;
 `;
 
 export default IntervalSelectSection;
