@@ -1,9 +1,9 @@
 import React from "react";
 import { HashRouter, Switch } from "react-router-dom";
 import { AppContextProvider as Provider } from "@components/Context";
-import TopNavbar from "@components/TopNavbar";
+import TopNavbar from "@components/containers/TopNavbar";
 import Route from "@components/RouteWithLayout";
-import SubToolbar from "@components/SubToolbar";
+import SubToolbar from "@components/containers/SubToolbar";
 import MainRouteComponent from "@routes/MainRoute";
 import SettingsRouteComponent from "@routes/SettingsRoute";
 import styled from "styled-components";
