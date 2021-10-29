@@ -4,7 +4,7 @@ import { v4 } from "uuid";
 
 export const DateTranslatedInKorean: Readonly<Record<DateEn, string>> = {
   Mon: "월요일",
-  Tus: "화요일",
+  Tue: "화요일",
   Wed: "수요일",
   Thu: "목요일",
   Fri: "금요일",

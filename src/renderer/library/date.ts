@@ -1,1 +1,1 @@
-export type DateEn = "Mon" | "Tus" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun";
+export type DateEn = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun";
