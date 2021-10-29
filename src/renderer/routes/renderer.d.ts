@@ -11,6 +11,8 @@ export interface ElectronOnly {
 
   openExternalCanvas: () => Promise<void>;
 
+  openEditOptions: (args: any) => void;
+
   addGenericIpcListener: <T>(
     channel: string,
     listener: (e: Event, props: T) => void

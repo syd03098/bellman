@@ -1,123 +1,53 @@
-import React, { PropsWithChildren } from "react";
-import styled, { css } from "styled-components";
-import { MenuButton, MenuItem, Menu } from "reakit/Menu";
-import {
-  ReactSelectProps,
-  SelectItemProps,
-  Size,
-} from "@components/select/types";
-import DropdownIcon from "@icons/DropdownIcon";
-
-const SelectItem = ({
-  children,
-  ...props
-}: PropsWithChildren<SelectItemProps>): JSX.Element => {
-  return <ReakitMenuItem {...props}>{children}</ReakitMenuItem>;
-};
-
-const getStyles = (size: Size) => {
-  switch (size) {
-    case "inline":
-      return css`
-        display: inline-flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 96px;
-      `;
-    case "full":
-      return css`
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-      `;
-    default:
-      return css``;
-  }
-};
+import React, { useCallback } from "react";
+import { ReactSelectProps, SelectOption } from "@components/select/types";
+import Select from "react-select";
+import styled from "styled-components";
 
 function ReactSelect<T extends string | number>({
-  children,
   options,
-  selected,
-  onChanged,
-  useMenuState: props,
-  size = "inline",
-  ...rest
+  value,
+  onChange: onChangeHandler,
 }: ReactSelectProps<T>): JSX.Element {
+  const onChange = useCallback(
+    (option: SelectOption<T> | null) => {
+      if (!option) {
+        return;
+      }
+      onChangeHandler(option);
+    },
+    [onChangeHandler]
+  );
+
   return (
-    <>
-      <StyledSelectButton size={size} {...props} {...rest}>
-        <Message>{children}</Message>
-        <IconWrap>
-          <DropdownIcon />
-        </IconWrap>
-      </StyledSelectButton>
-      <SelectMenu {...props} aria-label="options">
-        {options.map(({ value, displayValue }) => (
-          <SelectItem
-            key={value}
-            onClick={() => onChanged(value)}
-            aria-checked={value === selected}
-          >
-            {displayValue}
-          </SelectItem>
-        ))}
-      </SelectMenu>
-    </>
+    <SelectContainer>
+      <Select
+        classNamePrefix="react_select"
+        isSearchable={false}
+        isClearable={false}
+        options={options}
+        value={value}
+        onChange={onChange}
+      />
+    </SelectContainer>
   );
 }
 
-const StyledSelectButton = styled(MenuButton)<{ size: Size }>`
-  ${({ size }) => getStyles(size)}
-
-  background-color: ${({ theme }) => theme.button.white};
-  border: 1px solid ${({ theme }) => theme.border.white};
-  border-radius: 4px;
-  font-size: 14px;
-  color: ${({ theme }) => theme.text.plain};
-  height: 36px;
-`;
-
-const SelectMenu = styled(Menu)`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.button.white};
-  border: 1px solid ${({ theme }) => theme.border.white};
-  border-radius: 4px;
-`;
-
-const Message = styled.div`
-  display: flex;
-  align-items: center;
-  padding-left: 3px;
-  padding-right: 6px;
-  color: ${({ theme }) => theme.text.plain};
-`;
-
-const ReakitMenuItem = styled(MenuItem)`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: flex-end;
-  flex: 1 1 auto;
-  flex-wrap: nowrap;
-  padding: 6px 12px;
-  font-size: 14px;
-  color: ${({ theme }) => theme.text.plain};
-
-  &[aria-checked="true"] {
-    background-color: ${({ theme }) => theme.button.primary};
-    color: ${({ theme }) => theme.text.primary};
+const SelectContainer = styled.div`
+  .react_select__control {
+    background-color: ${({ theme }) => theme.button.white};
+    color: ${({ theme }) => theme.text.plain};
+    border: 1px solid ${({ theme }) => theme.border.white};
+    min-height: 32px;
   }
-`;
 
-const IconWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: ${({ theme }) => theme.text.plain};
+  .react_select__indicator-separator {
+    display: none;
+  }
+
+  .form__select__menu {
+    background-color: ${({ theme }) => theme.button.white};
+    color: ${({ theme }) => theme.text.plain};
+  }
 `;
 
 export default ReactSelect;
