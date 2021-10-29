@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, Menu } from "electron";
 import path from "path";
 import createCanvasWindow from "./canvas";
 
@@ -10,8 +10,9 @@ const gotTheLock = app.requestSingleInstanceLock();
 
 const createWindow = async () => {
   window = new BrowserWindow({
-    width: 320,
-    height: 480,
+    width: 375,
+    height: 563,
+    maximizable: false,
     webPreferences: {
       // renderer process에서 Node.js를 사용하지않도록 설정 (avoid xss issues)
       // Node.js 에서 제공하는 fs, 같은걸 쓰고싶으면 main script 에서 handling 하도록 유도
@@ -29,6 +30,18 @@ const createWindow = async () => {
 
   ipcMain.handle("open-external-canvas", async () => {
     await createCanvasWindow();
+  });
+
+  ipcMain.on("open-edit-options", (event, args) => {
+    const menu = Menu.buildFromTemplate([
+      {
+        label: "삭제",
+        type: "normal",
+        click: (): void => window?.webContents.send("delete-course", args),
+      },
+    ]);
+
+    menu.popup();
   });
 
   window.on("closed", () => {

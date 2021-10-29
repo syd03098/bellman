@@ -1,26 +1,10 @@
-import {
-  MenuButtonOptions,
-  MenuButtonProps,
-  MenuItemProps,
-  MenuStateReturn,
-  MenuItemOptions,
-} from "reakit/Menu";
-import { ReactNode } from "react";
-
-export type Size = "full" | "inline";
-
-interface Options<T extends string | number> {
+export type SelectOption<T extends string | number> = {
+  label: string;
   value: T;
-  displayValue: string;
+};
+
+export interface ReactSelectProps<T extends string | number> {
+  options: SelectOption<T>[];
+  value: SelectOption<T> | null;
+  onChange: (option: SelectOption<T>) => void;
 }
-
-export type ReactSelectProps<T extends string | number> = {
-  useMenuState: MenuStateReturn;
-  options: Options<T>[];
-  selected: T | undefined;
-  size?: Size;
-  onChanged: (value: T) => void;
-  children: ReactNode;
-} & Omit<MenuButtonProps, keyof MenuButtonOptions>;
-
-export type SelectItemProps = Omit<MenuItemProps, keyof MenuItemOptions>;

@@ -1,6 +1,7 @@
 import React, {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -16,6 +17,10 @@ import {
   Settings,
 } from "@library/settings";
 import { loadStorage, saveStorage, settingsKey } from "@library/storage";
+import {
+  defaultExerciseOptions,
+  ExerciseCourse,
+} from "@library/settings/exercise";
 
 export const AppContext = createContext<AppStates | null>(null);
 
@@ -35,13 +40,29 @@ export const AppContextProvider = ({
   // todo: handling isActivated value;
   const [isActivated, setActivated] = useState<boolean>(false);
 
-  // working on it
   const [settings, setSettings] = useState<Settings>(initialSettings);
 
   const intervalOptions: Readonly<Interval[]> = useMemo(
     () => [...defaultIntervalOptions],
     []
   );
+
+  const pushCourse = useCallback((course: ExerciseCourse) => {
+    setSettings((prev) => {
+      return { ...prev, courses: [...prev.courses, course] };
+    });
+  }, []);
+
+  const deleteCourse = useCallback((id: string) => {
+    setSettings((prev) => {
+      return {
+        ...prev,
+        courses: prev.courses.filter((item) => item.id !== id),
+      };
+    });
+  }, []);
+
+  const courseOptions = useMemo(() => [...defaultExerciseOptions], []);
 
   // todo: handling result value;
   const [result, setResult] = useState<Result[]>([]);
@@ -55,8 +76,16 @@ export const AppContextProvider = ({
       value={{
         pathName,
         isActivated,
-        intervalOptions,
         settings,
+
+        // option templates
+        intervalOptions,
+        courseOptions,
+
+        // handling courses;
+        pushCourse,
+        deleteCourse,
+
         result,
         setSettings,
       }}

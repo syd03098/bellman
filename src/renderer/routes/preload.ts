@@ -6,6 +6,9 @@ contextBridge.exposeInMainWorld("electronOnly", {
   openExternalCanvas: async (): Promise<void> =>
     ipcRenderer.invoke("open-external-canvas"),
 
+  openEditOptions: (args: any): void =>
+    ipcRenderer.send("open-edit-options", args),
+
   addGenericIpcListener: <T>(
     channel: string,
     listener: (e: Event, props: T) => void

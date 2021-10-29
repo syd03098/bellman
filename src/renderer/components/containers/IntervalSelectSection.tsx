@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from "react";
 import { useAppContext } from "@components/Context";
 import { Nullable } from "@library/global";
 import { useMenuState } from "reakit/Menu";
+import { SelectOption } from "@components/select/types";
 import styled from "styled-components";
 import ReactSelect from "@components/select";
 
@@ -13,14 +14,27 @@ const IntervalSelectSection = ({ interval }: Props): JSX.Element => {
   const { setSettings, intervalOptions } = useAppContext();
   const selectProps = useMenuState({ placement: "bottom-end" });
 
-  const selectedValue = intervalOptions.find(
-    ({ value }) => value === interval
-  )?.value;
+  const options: SelectOption<number>[] = useMemo(
+    () =>
+      intervalOptions.map(({ title, value }) => {
+        return {
+          label: title,
+          value,
+        };
+      }),
+    [intervalOptions]
+  );
 
-  const onClick = useCallback(
-    (value: number) => {
+  const selected = options.find((option) => option.value === interval);
+
+  const onChange = useCallback(
+    (option: SelectOption<number> | null) => {
+      if (!option) {
+        return;
+      }
+
       setSettings((prev) => {
-        return { ...prev, interval: value };
+        return { ...prev, interval: Number(option.value) };
       });
 
       selectProps.hide();
@@ -28,34 +42,14 @@ const IntervalSelectSection = ({ interval }: Props): JSX.Element => {
     [selectProps, setSettings]
   );
 
-  const selectContents = useMemo(() => {
-    if (interval === null) {
-      return "select...";
-    }
-
-    const displayName = intervalOptions.find(
-      ({ value }) => value === interval
-    )?.title;
-
-    return <>{displayName ?? "select..."}</>;
-  }, [interval, intervalOptions]);
-
   return (
     <Section>
       <Title>알람간격</Title>
       <ReactSelect
-        useMenuState={selectProps}
-        options={intervalOptions.map(({ value, title: displayValue }) => {
-          return {
-            value,
-            displayValue,
-          };
-        })}
-        selected={selectedValue}
-        onChanged={onClick}
-      >
-        {selectContents}
-      </ReactSelect>
+        options={options}
+        value={selected ?? null}
+        onChange={onChange}
+      />
     </Section>
   );
 };

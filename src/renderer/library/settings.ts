@@ -1,4 +1,5 @@
 import { Nullable } from "@library/global";
+import { ExerciseCourse } from "@library/settings/exercise";
 
 export interface Settings {
   interval: Nullable<number>;
@@ -59,10 +60,3 @@ export const defaultSettings: Readonly<Settings> = {
   playSound: false,
   courses: [],
 };
-
-export interface ExerciseCourse {
-  exerciseName: Exercise;
-  repeat: number;
-}
-
-export type Exercise = "pushup" | "yoga" | string;

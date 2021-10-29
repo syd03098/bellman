@@ -4,18 +4,21 @@ const { electronOnly } = window;
 
 const useIpcListener = <T,>({
   channel,
-  listener,
+  handler,
 }: {
   channel: string;
-  listener: (e: Event, props: T) => void;
+  handler: (props: T) => void;
 }) => {
   return useEffect(() => {
+    const listener = (e: Event, props: T): void => {
+      handler(props);
+    };
     electronOnly.addGenericIpcListener(channel, listener);
 
     return () => {
       electronOnly.removeGenericIpcListener(channel);
     };
-  }, [channel, listener]);
+  }, [channel, handler]);
 };
 
 export default useIpcListener;
