@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import format from "date-fns/format";
 import { DateEn } from "@library/date";
 import { v4 } from "uuid";
 
