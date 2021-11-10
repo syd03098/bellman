@@ -10,12 +10,8 @@ import React, {
 import { AppStates, Result } from "@library/types";
 import { useLocation } from "react-router-dom";
 import { PathMap, PathRawName } from "@library/path";
-import {
-  defaultIntervalOptions,
-  defaultSettings,
-  Interval,
-  Settings,
-} from "@library/settings";
+import { defaultSettings, Settings } from "@library/settings";
+import { defaultIntervalOptions, Interval } from "@library/settings/interval";
 import { loadStorage, saveStorage, settingsKey } from "@library/storage";
 import {
   defaultExerciseOptions,
