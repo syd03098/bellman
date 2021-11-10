@@ -1,6 +1,7 @@
 import { SetStateAction, Dispatch } from "react";
 import { PathType } from "@library/path";
-import { Interval, Settings } from "@library/settings";
+import { Settings } from "@library/settings";
+import { Interval } from "@library/settings/interval";
 import {
   Exercise,
   ExerciseCourse,
