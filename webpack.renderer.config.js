@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   target: "electron-renderer",
@@ -20,7 +21,6 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".js", ".tsx", ".jsx"],
     alias: {
-      "@src": path.resolve(__dirname, "./src"),
       "@routes": path.resolve(__dirname, "./src/renderer/routes"),
       "@components": path.resolve(__dirname, "./src/renderer/components"),
       "@icons": path.resolve(__dirname, "./src/renderer/components/icons"),
@@ -44,6 +44,14 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/renderer/routes/index.html",
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, "src/public/"),
+          to: path.resolve(__dirname, "dist/public/"),
+        },
+      ],
     }),
   ],
 };

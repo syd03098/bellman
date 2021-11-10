@@ -1,9 +1,11 @@
-import { app, BrowserWindow, ipcMain, Menu } from "electron";
+import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from "electron";
 import path from "path";
+import { askBeforeApplicationQuit, QuitResponse } from "./dialog";
 import createCanvasWindow from "./canvas";
 
-// BrowserWindow Object. avoid garbage collection
+// avoid garbage collection
 let window: BrowserWindow | null = null;
+let tray: Tray | null = null;
 
 // Single instance lock. avoid more than one window
 const gotTheLock = app.requestSingleInstanceLock();
@@ -14,22 +16,49 @@ const createWindow = async () => {
     height: 563,
     maximizable: false,
     webPreferences: {
-      // renderer process에서 Node.js를 사용하지않도록 설정 (avoid xss issues)
-      // Node.js 에서 제공하는 fs, 같은걸 쓰고싶으면 main script 에서 handling 하도록 유도
       nodeIntegration: false,
-      // preload scripts를 index.html과 다른 javascript context에서 실행하도록 설정 (security issue)
       contextIsolation: true,
       preload: path.resolve(__dirname, "preload.js"),
     },
   });
 
-  // todo: codes for production level
-  if (process.env.NODE_ENV === "development") {
-    await window.loadFile("index.html");
-  }
+  tray = new Tray(
+    nativeImage.createFromPath(path.resolve(__dirname, "./public/app-icon.png"))
+  );
+  tray.setTitle("bellman");
+  tray.setToolTip("bellman - uos project");
+  tray.on("double-click", () => {
+    if (window === null) {
+      return;
+    }
 
-  ipcMain.handle("open-external-canvas", async () => {
-    await createCanvasWindow();
+    window?.show();
+  });
+
+  await window.loadFile("index.html");
+
+  window.on("blur", () => {
+    if (process.env.NODE_ENV === "development") {
+      return;
+    }
+
+    window?.hide();
+  });
+
+  window.on("close", (event) => {
+    if (!window) {
+      return;
+    }
+
+    const response = askBeforeApplicationQuit(window);
+
+    if (response === QuitResponse.No) {
+      event.preventDefault();
+    }
+  });
+
+  window.on("closed", () => {
+    window = null;
   });
 
   ipcMain.on("open-edit-options", (event, args) => {
@@ -44,8 +73,8 @@ const createWindow = async () => {
     menu.popup();
   });
 
-  window.on("closed", () => {
-    window = null;
+  ipcMain.handle("open-external-canvas", async () => {
+    await createCanvasWindow();
   });
 };
 
