@@ -25,6 +25,7 @@ module.exports = {
     "react/jsx-props-no-spreading": "off",
     "react/require-default-props": "off",
     "no-console": "off",
+    "no-shadow": "off",
     "no-use-before-define": "off",
     "import/no-unresolved": "off",
     "@typescript-eslint/no-var-requires": "off",
