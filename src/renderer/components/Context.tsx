@@ -8,8 +8,6 @@ import React, {
   useState,
 } from "react";
 import { AppStates, Result } from "@library/types";
-import { useLocation } from "react-router-dom";
-import { PathMap, PathRawName } from "@library/path";
 import { defaultSettings, Settings } from "@library/settings";
 import { defaultIntervalOptions, Interval } from "@library/settings/interval";
 import { loadStorage, saveStorage, settingsKey } from "@library/storage";
@@ -30,9 +28,6 @@ export const AppContextProvider = ({
 }: {
   children: ReactNode;
 }): JSX.Element => {
-  const location = useLocation();
-  const pathName = PathMap[location.pathname as PathRawName];
-
   // todo: handling isActivated value;
   const [isActivated, setActivated] = useState<boolean>(false);
 
@@ -70,7 +65,6 @@ export const AppContextProvider = ({
   return (
     <AppContext.Provider
       value={{
-        pathName,
         isActivated,
         settings,
 
