@@ -1,4 +1,4 @@
-export type Exercise = "pushUp" | "squat";
+export type Exercise = "squat";
 
 export interface ExerciseCourse {
   id: string;
@@ -11,13 +11,13 @@ export type ExerciseOptions = Omit<ExerciseCourse, "id" | "repeat">;
 
 export type ExerciseSubmitType = Omit<ExerciseCourse, "id">;
 
+export enum ExerciseName {
+  squat = "스쿼트",
+}
+
 export const defaultExerciseOptions: Readonly<ExerciseOptions[]> = [
   {
-    exercise: "pushUp",
-    exerciseName: "푸쉬업",
-  },
-  {
     exercise: "squat",
-    exerciseName: "스쿼트",
+    exerciseName: ExerciseName.squat,
   },
 ];
