@@ -1,6 +1,7 @@
 import React, {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -11,7 +12,9 @@ import {
   defaultExerciseOptions,
   ExerciseOptions,
 } from "@library/settings/exercise";
+import { isProgramLostFocus, ProgramStatus } from "@library/program";
 import { loadStorage, saveStorage } from "@library/storage";
+import { useTimer as useTimeout } from "use-timer";
 import { StorageKeys } from "@library/storage/keys";
 import { AppStates } from "@library/types";
 import { Result } from "@library/settings/reulsts";
@@ -26,6 +29,8 @@ function fetchResults() {
 }
 
 export const AppContext = createContext<AppStates | null>(null);
+
+const { openExternalCanvas } = window.electronOnly;
 
 export const AppContextProvider = ({
   children,
@@ -42,6 +47,51 @@ export const AppContextProvider = ({
   } = useSettings();
 
   const [results, setResults] = useState<Result[]>(() => fetchResults());
+  const [status, updateStatus] = useState<ProgramStatus>(ProgramStatus.Stopped);
+
+  useEffect(() => {
+    saveStorage(StorageKeys.Results, results);
+  }, [results]);
+
+  const { start: startTimeout, reset: resetTimeout } = useTimeout({
+    initialTime: interval ?? undefined,
+    endTime: 0,
+    timerType: "DECREMENTAL",
+    onTimeOver: async () => {
+      updateStatus(ProgramStatus.Suspended);
+      await openExternalCanvas();
+    },
+  });
+
+  const toggleTimeout = useCallback(() => {
+    if (isProgramLostFocus[status]) {
+      return;
+    }
+
+    if (status === ProgramStatus.Stopped) {
+      updateStatus(ProgramStatus.Running);
+      startTimeout();
+    } else {
+      updateStatus(ProgramStatus.Stopped);
+      resetTimeout();
+    }
+  }, [resetTimeout, startTimeout, status]);
+
+  const updateResults = useCallback(() => {
+    const results = fetchResults();
+    setResults(results);
+
+    if (!isProgramLostFocus[status]) {
+      return;
+    }
+
+    if (status === ProgramStatus.Suspended) {
+      updateStatus(ProgramStatus.Running);
+      startTimeout();
+    } else {
+      updateStatus(ProgramStatus.Stopped);
+    }
+  }, [startTimeout, status]);
 
   const intervalOptions: Readonly<Interval[]> = useMemo(
     () => defaultIntervalOptions,
@@ -53,17 +103,18 @@ export const AppContextProvider = ({
     []
   );
 
-  useEffect(() => {
-    saveStorage(StorageKeys.Results, results);
-  }, [results]);
-
   return (
     <AppContext.Provider
       value={{
+        programStatus: status,
+        toggleTimeout,
+        setProgramStatus: updateStatus,
+
         // settings
         interval,
         playSound,
         courses,
+        setSettings,
 
         // option templates
         intervalOptions,
@@ -74,7 +125,7 @@ export const AppContextProvider = ({
         deleteCourse,
 
         results,
-        setSettings,
+        updateResults,
       }}
     >
       {children}

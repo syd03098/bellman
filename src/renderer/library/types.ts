@@ -4,12 +4,18 @@ import {
   ExerciseOptions,
   ExerciseSubmitType,
 } from "@library/settings/exercise";
+import { ProgramStatus } from "@library/program";
 import { Nullable } from "@library/global";
 import { Interval } from "@library/settings/interval";
 import { Settings } from "@library/settings";
 import { Result } from "@library/settings/reulsts";
 
 export interface AppStates {
+  // programStatus: Status;
+  programStatus: ProgramStatus;
+  setProgramStatus: Dispatch<SetStateAction<ProgramStatus>>;
+  toggleTimeout: () => void;
+
   // settings;
   interval: Nullable<number>;
   courses: ExerciseCourse[];
@@ -25,4 +31,5 @@ export interface AppStates {
   deleteCourse: (id: string) => void;
 
   results: Result[];
+  updateResults: () => void;
 }
