@@ -1,5 +1,5 @@
-import { Nullable } from "@library/global";
 import { ExerciseCourse } from "@library/settings/exercise";
+import { Nullable } from "@library/global";
 
 export interface Settings {
   interval: Nullable<number>;

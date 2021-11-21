@@ -5,14 +5,6 @@ export type Interval = {
 
 export const defaultIntervalOptions: Readonly<Interval[]> = [
   {
-    title: "10분",
-    value: 10,
-  },
-  {
-    title: "20분",
-    value: 20,
-  },
-  {
     title: "30분",
     value: 30,
   },

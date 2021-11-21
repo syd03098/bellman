@@ -1,17 +1,16 @@
 import { SetStateAction, Dispatch } from "react";
-import { Settings } from "@library/settings";
+import { ExerciseCourse, ExerciseOptions } from "@library/settings/exercise";
+import { Nullable } from "@library/global";
 import { Interval } from "@library/settings/interval";
-import {
-  Exercise,
-  ExerciseCourse,
-  ExerciseOptions,
-} from "@library/settings/exercise";
+import { Settings } from "@library/settings";
+import { Result } from "@library/settings/reulsts";
 
 export interface AppStates {
-  isActivated: boolean;
-
   // settings;
-  settings: Settings;
+  interval: Nullable<number>;
+  courses: ExerciseCourse[];
+  playSound: boolean;
+  setSettings: Dispatch<SetStateAction<Settings>>;
 
   // option templates
   intervalOptions: Readonly<Interval[]>;
@@ -21,12 +20,5 @@ export interface AppStates {
   pushCourse: (course: ExerciseCourse) => void;
   deleteCourse: (id: string) => void;
 
-  result: Result[];
-  setSettings: Dispatch<SetStateAction<Settings>>;
-}
-
-export interface Result {
-  date: number;
-  exercise: Exercise;
-  hadSucceeded: boolean;
+  results: Result[];
 }

@@ -10,12 +10,12 @@ interface Props {
 }
 
 const SettingsRoute = ({ cssProps: cssFlexFull }: Props): JSX.Element => {
-  const { settings } = useAppContext();
+  const { interval, playSound } = useAppContext();
 
   return (
     <section css={cssFlexFull}>
-      <IntervalSelectSection interval={settings.interval} />
-      <ToggleSoundSection isPlaySound={settings.playSound} />
+      <IntervalSelectSection interval={interval} />
+      <ToggleSoundSection isPlaySound={playSound} />
       <CoursePopover />
     </section>
   );
