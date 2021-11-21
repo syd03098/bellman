@@ -1,5 +1,4 @@
 import { SetStateAction, Dispatch } from "react";
-import { PathType } from "@library/path";
 import { Settings } from "@library/settings";
 import { Interval } from "@library/settings/interval";
 import {
@@ -9,7 +8,6 @@ import {
 } from "@library/settings/exercise";
 
 export interface AppStates {
-  pathName: PathType;
   isActivated: boolean;
 
   // settings;

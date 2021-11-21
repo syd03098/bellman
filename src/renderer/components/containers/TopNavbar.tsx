@@ -1,53 +1,50 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { getFormattedDate } from "@library/utils";
-import { useAppContext } from "@components/Context";
-import { PathRawName, PathType } from "@library/path";
-import { useHistory } from "react-router-dom";
-import styled from "styled-components";
-import Button from "@components/button";
+import { CssPropsType } from "@library/global";
+import Backward from "@icons/ArrowLeftIcon";
 import Setting from "@icons/SettingIcon";
-import ArrowLeft from "@icons/ArrowLeftIcon";
+import styled from "styled-components";
 
-const Destination: Readonly<Record<PathType, PathRawName>> = {
-  main: "/settings",
-  settings: "/",
-};
+interface Props {
+  cssProps: CssPropsType;
+}
 
-const TopNavbar = (): JSX.Element => {
-  const { push } = useHistory();
-  const { pathName } = useAppContext();
+const TopNavbar = ({ cssProps: cssFlexSpaceBetween }: Props): JSX.Element => {
+  const { pathname } = useLocation();
   const dateFormatted = useMemo(() => getFormattedDate(), []);
 
-  const changeLocation = useCallback(() => {
-    push(Destination[pathName]);
-  }, [pathName, push]);
-
-  const buttonIcon = useMemo(() => {
-    switch (pathName) {
-      case "main":
-        return <Setting />;
-      case "settings":
-        return <ArrowLeft />;
+  const locationChangeButton = useMemo(() => {
+    switch (pathname) {
+      case "/":
+        return (
+          <StyledLink to="/settings" replace>
+            <Setting />
+          </StyledLink>
+        );
+      case "/settings":
+        return (
+          <StyledLink to="/" replace>
+            <Backward />
+          </StyledLink>
+        );
       default:
         return <></>;
     }
-  }, [pathName]);
+  }, [pathname]);
 
   return (
-    <StyledHeader>
-      <Button onClick={changeLocation}>{buttonIcon}</Button>
-      <DateArea>
-        <time>{dateFormatted}</time>
-      </DateArea>
-    </StyledHeader>
+    <section css={cssFlexSpaceBetween}>
+      <>{locationChangeButton}</>
+      <DateArea>{dateFormatted}</DateArea>
+    </section>
   );
 };
 
-const StyledHeader = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
+const StyledLink = styled(Link)`
+  font-size: 0;
+  line-height: 0;
+  color: ${({ theme }) => theme.text.plain};
 `;
 
 const DateArea = styled.div`

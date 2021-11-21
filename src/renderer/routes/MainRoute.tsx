@@ -1,7 +1,16 @@
 import React from "react";
+import { CssPropsType } from "@library/global";
 
-const MainRoute = (): JSX.Element => {
-  return <></>;
+interface Props {
+  cssProps: CssPropsType;
+}
+
+const MainRoute = ({ cssProps: cssFlexFull }: Props): JSX.Element => {
+  return (
+    <section css={cssFlexFull}>
+      <>hello worlds</>
+    </section>
+  );
 };
 
 export default MainRoute;
