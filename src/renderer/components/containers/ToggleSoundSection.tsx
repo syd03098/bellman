@@ -1,15 +1,11 @@
 import React, { useCallback } from "react";
+import { flexSpaceBetween, OptionTitle } from "@library/styleFunctions";
 import { useAppContext } from "@components/Context";
-import { flexSpaceBetween } from "@library/styleFunctions";
-import styled from "styled-components";
+import { css } from "styled-components";
 import Checkbox from "@components/Checkbox";
 
-interface Props {
-  isPlaySound: boolean;
-}
-
-const ToggleSoundSection = ({ isPlaySound }: Props): JSX.Element => {
-  const { setSettings } = useAppContext();
+const ToggleSoundSection = (): JSX.Element => {
+  const { setSettings, playSound } = useAppContext();
 
   const onChange = useCallback(() => {
     setSettings((prev) => {
@@ -18,25 +14,16 @@ const ToggleSoundSection = ({ isPlaySound }: Props): JSX.Element => {
   }, [setSettings]);
 
   return (
-    <Section>
-      <Title>사운드</Title>
-      <Checkbox checked={isPlaySound} onChange={onChange} />
-    </Section>
+    <div
+      css={css`
+        ${flexSpaceBetween};
+        padding-top: 16px;
+      `}
+    >
+      <OptionTitle>사운드</OptionTitle>
+      <Checkbox checked={playSound} onChange={onChange} />
+    </div>
   );
 };
-
-const Section = styled.section`
-  ${flexSpaceBetween};
-
-  padding-top: 16px;
-`;
-
-const Title = styled.h3`
-  font-size: 14px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.text.bold};
-  margin: 0;
-  user-select: none;
-`;
 
 export default ToggleSoundSection;

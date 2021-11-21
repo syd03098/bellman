@@ -1,18 +1,13 @@
 import React, { useCallback, useMemo } from "react";
+import { flexSpaceBetween, OptionTitle } from "@library/styleFunctions";
 import { useAppContext } from "@components/Context";
-import { Nullable } from "@library/global";
 import { useMenuState } from "reakit/Menu";
 import { SelectOption } from "@components/select/types";
-import { flexSpaceBetween } from "@library/styleFunctions";
-import styled from "styled-components";
+import { css } from "styled-components";
 import ReactSelect from "@components/select";
 
-interface Props {
-  interval: Nullable<number>;
-}
-
-const IntervalSelectSection = ({ interval }: Props): JSX.Element => {
-  const { setSettings, intervalOptions } = useAppContext();
+const IntervalSelectSection = (): JSX.Element => {
+  const { setSettings, intervalOptions, interval } = useAppContext();
   const selectProps = useMenuState({ placement: "bottom-end" });
 
   const options: SelectOption<number>[] = useMemo(
@@ -35,7 +30,7 @@ const IntervalSelectSection = ({ interval }: Props): JSX.Element => {
       }
 
       setSettings((prev) => {
-        return { ...prev, interval: Number(option.value) };
+        return { ...prev, interval: option.value };
       });
 
       selectProps.hide();
@@ -44,29 +39,21 @@ const IntervalSelectSection = ({ interval }: Props): JSX.Element => {
   );
 
   return (
-    <Section>
-      <Title>알람간격</Title>
+    <div
+      css={css`
+        ${flexSpaceBetween};
+        padding-top: 8px;
+        font-size: 14px;
+      `}
+    >
+      <OptionTitle>알람간격</OptionTitle>
       <ReactSelect
         options={options}
         value={selected ?? null}
         onChange={onChange}
       />
-    </Section>
+    </div>
   );
 };
-
-const Section = styled.section`
-  ${flexSpaceBetween};
-
-  padding-top: 8px;
-`;
-
-const Title = styled.h3`
-  font-size: 14px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.text.bold};
-  margin: 0;
-  user-select: none;
-`;
 
 export default IntervalSelectSection;

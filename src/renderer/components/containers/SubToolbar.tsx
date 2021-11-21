@@ -1,10 +1,25 @@
 import React from "react";
 import Button from "@components/button";
-import styled from "styled-components";
+import styled, { css, useTheme } from "styled-components";
+import { CssPropsType } from "@library/global";
 
-const SubToolbar = (): JSX.Element => {
+interface Props {
+  cssProps: CssPropsType;
+}
+
+const SubToolbar = ({ cssProps: cssFlexEnd }: Props): JSX.Element => {
+  const theme = useTheme();
+
   return (
-    <Wrap>
+    <section
+      css={css`
+        ${cssFlexEnd};
+        height: 32px;
+        background-color: ${theme.layout.subHeader};
+        border-top: 1px solid ${theme.border.white};
+        padding: 0 12px;
+      `}
+    >
       <Right>
         <Button variant="primary" size="sm">
           Exercise now
@@ -13,19 +28,9 @@ const SubToolbar = (): JSX.Element => {
           Start Timer
         </Button>
       </Right>
-    </Wrap>
+    </section>
   );
 };
-
-const Wrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  padding: 4px 12px;
-  background-color: ${({ theme }) => theme.layout.subHeader};
-  border-top: 1px solid ${({ theme }) => theme.border.white};
-`;
 
 const Right = styled.div`
   display: flex;

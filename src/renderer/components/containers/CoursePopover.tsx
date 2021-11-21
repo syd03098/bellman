@@ -1,17 +1,16 @@
 import React, { useCallback } from "react";
+import { flexSpaceBetween, OptionTitle } from "@library/styleFunctions";
+import { ExerciseSubmitType } from "@library/settings/exercise";
 import { usePopoverState } from "reakit/Popover";
 import { useAppContext } from "@components/Context";
-import { getUniqueKey } from "@library/utils";
-import { ExerciseSubmitType } from "@library/settings/exercise";
+import CourseEditPopover from "@components/CourseEditPopover";
+import CourseList from "@components/containers/CourseList";
 import PlusIcon from "@icons/PlusIcon";
 import Button from "@components/button";
 import styled from "styled-components";
-import CourseEditPopover from "@components/CourseEditPopover";
-import CourseList from "@components/containers/CourseList";
-import { flexSpaceBetween } from "@library/styleFunctions";
 
 const CoursePopover = (): JSX.Element => {
-  const { courseOptions, pushCourse } = useAppContext();
+  const { courseOptions, pushCourse, courses } = useAppContext();
   const props = usePopoverState({ placement: "bottom-end" });
 
   const defaultCourseOptions = courseOptions.map(
@@ -24,13 +23,8 @@ const CoursePopover = (): JSX.Element => {
   );
 
   const onSubmit = useCallback(
-    ({ exercise, exerciseName, repeat }: ExerciseSubmitType) => {
-      pushCourse({
-        id: getUniqueKey(),
-        exercise,
-        exerciseName,
-        repeat,
-      });
+    (submitted: ExerciseSubmitType) => {
+      pushCourse(submitted);
 
       props.hide();
     },
@@ -40,7 +34,7 @@ const CoursePopover = (): JSX.Element => {
   return (
     <FlexFull>
       <Top>
-        <Title>코스 추가</Title>
+        <OptionTitle>코스 추가</OptionTitle>
         <CourseEditPopover
           aria-label="course editor"
           options={defaultCourseOptions}
@@ -48,7 +42,7 @@ const CoursePopover = (): JSX.Element => {
           onSubmitHandler={onSubmit}
           buttonMessage="Add Course"
           disclosure={
-            <Button>
+            <Button disabled={courses.length !== 0}>
               <PlusIcon size={24} />
             </Button>
           }
@@ -59,7 +53,7 @@ const CoursePopover = (): JSX.Element => {
   );
 };
 
-const FlexFull = styled.section`
+const FlexFull = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
@@ -67,17 +61,7 @@ const FlexFull = styled.section`
 
 const Top = styled.div`
   ${flexSpaceBetween};
-
-  padding-top: 24px;
-  padding-bottom: 16px;
-`;
-
-const Title = styled.h3`
-  font-size: 14px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.text.bold};
-  margin: 0;
-  user-select: none;
+  padding: 16px 0;
 `;
 
 export default CoursePopover;

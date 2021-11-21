@@ -6,6 +6,7 @@ import styled from "styled-components";
 function ReactSelect<T extends string | number>({
   options,
   value,
+  disabled = false,
   onChange: onChangeHandler,
 }: ReactSelectProps<T>): JSX.Element {
   const onChange = useCallback(
@@ -24,6 +25,7 @@ function ReactSelect<T extends string | number>({
         classNamePrefix="react_select"
         isSearchable={false}
         isClearable={false}
+        isDisabled={disabled}
         options={options}
         value={value}
         onChange={onChange}
@@ -38,8 +40,15 @@ const SelectContainer = styled.div`
     color: ${({ theme }) => theme.text.plain};
     border: 1px solid ${({ theme }) => theme.border.white};
     min-height: 32px;
+
+    .react_select__value-container {
+      line-height: normal;
+    }
   }
 
+  .react_select__indicator {
+    padding: 4px;
+  }
   .react_select__indicator-separator {
     display: none;
   }
