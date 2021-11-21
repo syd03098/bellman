@@ -1,5 +1,5 @@
 import format from "date-fns/format";
-import { DateEn } from "@library/date";
+import { DateEn, timeIntervals } from "@library/date";
 import { v4 } from "uuid";
 
 export const DateTranslatedInKorean: Readonly<Record<DateEn, string>> = {
@@ -13,9 +13,27 @@ export const DateTranslatedInKorean: Readonly<Record<DateEn, string>> = {
 };
 
 export const getFormattedDate = (): string => {
-  const [string, day] = format(new Date(), "yyyy-MM-dd,E").split(",");
-  const translatedInKorean = DateTranslatedInKorean[day as DateEn];
-  return `${string} ${translatedInKorean}`;
+  const [string, day] = format(Date.now(), "yyyy-MM-dd,E").split(",");
+  return `${string} ${DateTranslatedInKorean[day as DateEn]}`;
+};
+
+export const getDateFromNow = (time: number): string => {
+  const seconds = Math.floor((Date.now() - time) / 1000);
+  const index = timeIntervals.findIndex((value) => value.seconds < seconds);
+
+  if (index === -1) {
+    return "invalid";
+  }
+
+  const interval = timeIntervals[index];
+  const count = Math.floor(seconds / interval.seconds);
+
+  switch (interval.label) {
+    case "방금":
+      return "방금전";
+    default:
+      return `${count}${interval.label}전`;
+  }
 };
 
 export const getUniqueKey = (): string => {
