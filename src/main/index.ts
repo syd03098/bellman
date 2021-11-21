@@ -12,8 +12,8 @@ const gotTheLock = app.requestSingleInstanceLock();
 
 const createWindow = async () => {
   window = new BrowserWindow({
-    width: 375,
-    height: 563,
+    width: 320,
+    height: 480,
     maximizable: false,
     webPreferences: {
       nodeIntegration: false,
@@ -26,7 +26,6 @@ const createWindow = async () => {
     nativeImage.createFromPath(path.resolve(__dirname, "./public/app-icon.png"))
   );
   tray.setTitle("bellman");
-  tray.setToolTip("bellman - uos project");
   tray.on("double-click", () => {
     if (window === null) {
       return;

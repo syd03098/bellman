@@ -1,4 +1,4 @@
-import { css, SimpleInterpolation } from "styled-components";
+import styled, { css, SimpleInterpolation } from "styled-components";
 
 export const flexSpaceBetween = (): ReadonlyArray<SimpleInterpolation> => css`
   display: flex;
@@ -6,4 +6,10 @@ export const flexSpaceBetween = (): ReadonlyArray<SimpleInterpolation> => css`
   justify-content: space-between;
 `;
 
-export default { flexSpaceBetween };
+export const OptionTitle = styled.h3`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.text.bold};
+  margin: 0;
+  user-select: none;
+`;

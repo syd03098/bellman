@@ -29,7 +29,7 @@ const Router = ({ cssProps: cssFlexColumn }: Props): JSX.Element => {
             element={<SettingsRouteComponent cssProps={cssFlexFull} />}
           />
         </Routes>
-        <SubToolbar />
+        <SubToolbar cssProps={cssFlexEnd} />
       </main>
     </HashRouter>
   );
@@ -39,6 +39,13 @@ const cssFlexSpaceBetween = css`
   ${flexSpaceBetween};
   flex-wrap: wrap;
   padding: 8px 12px;
+`;
+
+const cssFlexEnd = css`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 `;
 
 const cssFlexFull = css`

@@ -1,5 +1,9 @@
 import { SetStateAction, Dispatch } from "react";
-import { ExerciseCourse, ExerciseOptions } from "@library/settings/exercise";
+import {
+  ExerciseCourse,
+  ExerciseOptions,
+  ExerciseSubmitType,
+} from "@library/settings/exercise";
 import { Nullable } from "@library/global";
 import { Interval } from "@library/settings/interval";
 import { Settings } from "@library/settings";
@@ -17,7 +21,7 @@ export interface AppStates {
   courseOptions: Readonly<ExerciseOptions[]>;
 
   // handling courses
-  pushCourse: (course: ExerciseCourse) => void;
+  pushCourse: (course: ExerciseSubmitType) => void;
   deleteCourse: (id: string) => void;
 
   results: Result[];

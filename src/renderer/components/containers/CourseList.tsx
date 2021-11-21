@@ -1,18 +1,15 @@
 import React, { useCallback } from "react";
 import { ExerciseCourse } from "@library/settings/exercise";
+import { ExerciseEmoji } from "@library/emoji";
 import { useAppContext } from "@components/Context";
-import styled from "styled-components";
-import CourseItem from "@components/CourseItem";
 import useIpcListener from "@hooks/useIpcListener";
+import styled from "styled-components";
+import Item from "@components/Item";
 
 const { openEditOptions } = window.electronOnly;
 
 const CourseList = (): JSX.Element => {
   const { deleteCourse, courses } = useAppContext();
-
-  const onOpenNativeMenu = useCallback((course: ExerciseCourse) => {
-    openEditOptions(course);
-  }, []);
 
   const onDeleteCourse = useCallback(
     ({ id }: ExerciseCourse) => {
@@ -29,11 +26,13 @@ const CourseList = (): JSX.Element => {
   return (
     <Contents>
       {courses.map((course) => (
-        <CourseItem
+        <Item
           key={course.id}
-          course={course}
-          onClick={() => onOpenNativeMenu(course)}
-        />
+          emoji={ExerciseEmoji[course.exercise]}
+          onClick={() => openEditOptions(course)}
+        >
+          {course.exerciseName} ({course.repeat}회)
+        </Item>
       ))}
     </Contents>
   );
