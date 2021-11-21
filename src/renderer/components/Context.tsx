@@ -1,72 +1,69 @@
 import React, {
   createContext,
   ReactNode,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
-import { AppStates, Result } from "@library/types";
-import { defaultSettings, Settings } from "@library/settings";
 import { defaultIntervalOptions, Interval } from "@library/settings/interval";
-import { loadStorage, saveStorage, settingsKey } from "@library/storage";
 import {
   defaultExerciseOptions,
-  ExerciseCourse,
+  ExerciseOptions,
 } from "@library/settings/exercise";
+import { loadStorage, saveStorage } from "@library/storage";
+import { StorageKeys } from "@library/storage/keys";
+import { AppStates } from "@library/types";
+import { Result } from "@library/settings/reulsts";
+import useSettings from "@hooks/useSettings";
+
+function fetchResults() {
+  const fetched: Result[] = loadStorage(StorageKeys.Results);
+
+  return fetched.length > 0
+    ? fetched.sort((a, b) => b.date - a.date).filter((_, num) => num < 12)
+    : [];
+}
 
 export const AppContext = createContext<AppStates | null>(null);
-
-const initialSettings = {
-  ...defaultSettings,
-  ...loadStorage(settingsKey),
-};
 
 export const AppContextProvider = ({
   children,
 }: {
   children: ReactNode;
 }): JSX.Element => {
-  // todo: handling isActivated value;
-  const [isActivated, setActivated] = useState<boolean>(false);
+  const {
+    interval,
+    playSound,
+    courses,
+    pushCourse,
+    deleteCourse,
+    setSettings,
+  } = useSettings();
 
-  const [settings, setSettings] = useState<Settings>(initialSettings);
+  const [results, setResults] = useState<Result[]>(() => fetchResults());
 
   const intervalOptions: Readonly<Interval[]> = useMemo(
-    () => [...defaultIntervalOptions],
+    () => defaultIntervalOptions,
     []
   );
 
-  const pushCourse = useCallback((course: ExerciseCourse) => {
-    setSettings((prev) => {
-      return { ...prev, courses: [...prev.courses, course] };
-    });
-  }, []);
-
-  const deleteCourse = useCallback((id: string) => {
-    setSettings((prev) => {
-      return {
-        ...prev,
-        courses: prev.courses.filter((item) => item.id !== id),
-      };
-    });
-  }, []);
-
-  const courseOptions = useMemo(() => [...defaultExerciseOptions], []);
-
-  // todo: handling result value;
-  const [result, setResult] = useState<Result[]>([]);
+  const courseOptions: Readonly<ExerciseOptions[]> = useMemo(
+    () => defaultExerciseOptions,
+    []
+  );
 
   useEffect(() => {
-    saveStorage(settings);
-  }, [settings]);
+    saveStorage(StorageKeys.Results, results);
+  }, [results]);
 
   return (
     <AppContext.Provider
       value={{
-        isActivated,
-        settings,
+        // settings
+        interval,
+        playSound,
+        courses,
 
         // option templates
         intervalOptions,
@@ -76,7 +73,7 @@ export const AppContextProvider = ({
         pushCourse,
         deleteCourse,
 
-        result,
+        results,
         setSettings,
       }}
     >

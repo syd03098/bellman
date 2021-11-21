@@ -8,7 +8,7 @@ import useIpcListener from "@hooks/useIpcListener";
 const { openEditOptions } = window.electronOnly;
 
 const CourseList = (): JSX.Element => {
-  const { deleteCourse, settings } = useAppContext();
+  const { deleteCourse, courses } = useAppContext();
 
   const onOpenNativeMenu = useCallback((course: ExerciseCourse) => {
     openEditOptions(course);
@@ -28,7 +28,7 @@ const CourseList = (): JSX.Element => {
 
   return (
     <Contents>
-      {settings.courses.map((course) => (
+      {courses.map((course) => (
         <CourseItem
           key={course.id}
           course={course}
