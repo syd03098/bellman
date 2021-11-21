@@ -16,11 +16,13 @@ export const lightTheme: DefaultTheme = {
     white: "#d0d7de",
     smoke: "#cfd6dd",
     primary: "#1062d6",
+    danger: "#b62324",
   },
   button: {
     white: "#ffffff",
     smoke: "#f6f8fa",
     primary: "#0088ff",
+    danger: "#e32d23",
   },
 };
 

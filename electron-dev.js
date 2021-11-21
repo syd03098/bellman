@@ -15,7 +15,7 @@ const compiler = webpack({
 
   entry: "./src/main/index.ts",
   mode: "development",
-  devtool: "source-map",
+  devtool: "inline-source-map",
   output: {
     path: path.resolve(__dirname, "dist/"),
     filename: "index.js",

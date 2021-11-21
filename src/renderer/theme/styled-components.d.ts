@@ -25,6 +25,7 @@ declare module "styled-components" {
       white: string;
       smoke: string;
       primary: string;
+      danger: string;
     };
     button: {
       // 흰색 버튼 배경
@@ -33,6 +34,8 @@ declare module "styled-components" {
       smoke: string;
       // primary(짙은 파랑) 버튼 배경
       primary: string;
+      // danger (red) 버튼 배경
+      danger: string;
     };
   }
 }

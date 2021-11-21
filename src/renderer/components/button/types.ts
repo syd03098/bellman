@@ -1,4 +1,4 @@
-export type Variant = "primary" | "smoke" | "white" | "default";
+export type Variant = "primary" | "smoke" | "white" | "danger" | "default";
 
 export type Size = "md" | "sm";
 

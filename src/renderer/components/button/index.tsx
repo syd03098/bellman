@@ -38,6 +38,12 @@ const getButtonStyles = (variant: Variant) => {
         color: ${({ theme }) => theme.text.plain};
         border: 1px solid ${({ theme }) => theme.border.white};
       `;
+    case "danger":
+      return css`
+        background-color: ${({ theme }) => theme.button.danger};
+        color: ${({ theme }) => theme.text.primary};
+        border: 1px solid ${({ theme }) => theme.border.danger};
+      `;
     default:
       return css`
         padding: 0;

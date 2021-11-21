@@ -10,6 +10,10 @@ let tray: Tray | null = null;
 // Single instance lock. avoid more than one window
 const gotTheLock = app.requestSingleInstanceLock();
 
+export const getRootWindow = () => {
+  return window ?? null;
+};
+
 const createWindow = async () => {
   window = new BrowserWindow({
     width: 320,
@@ -96,3 +100,5 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
+
+export default { getRootWindow };
