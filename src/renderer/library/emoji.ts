@@ -1,5 +1,5 @@
 export enum ExerciseEmoji {
-  squat = "🏋️",
+  squat = "🏋🏻",
 }
 
 export const Sigh = ["💦", "☕", "💤", "💬", "👀"];

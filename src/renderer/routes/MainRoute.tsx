@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
+import { ExerciseEmoji, Sigh } from "@library/emoji";
+import { getDateFromNow } from "@library/utils";
 import { useAppContext } from "@components/Context";
+import { ExerciseName } from "@library/settings/exercise";
 import { CssPropsType } from "@library/global";
 import styled, { css } from "styled-components";
-import { ExerciseEmoji, Sigh } from "@library/emoji";
 import Item from "@components/Item";
-import { getDateFromNow } from "@library/utils";
-import { ExerciseName } from "@library/settings/exercise";
 
 interface Props {
   cssProps: CssPropsType;
@@ -57,7 +57,7 @@ const MainRoute = ({ cssProps: cssFlexFull }: Props): JSX.Element => {
               disabled
             >
               <Contents>{summary}</Contents>
-              <Right title={result.hadSucceeded ? "성공" : "에러발생"}>
+              <Right title={result.hadSucceeded ? "성공" : "에러"}>
                 {result.hadSucceeded ? "✔" : "❓"}
               </Right>
             </Item>
@@ -105,6 +105,7 @@ const Contents = styled.div`
   span {
     color: ${({ theme }) => theme.text.smoke};
     font-size: 12px;
+    letter-spacing: -0.3px;
   }
 `;
 

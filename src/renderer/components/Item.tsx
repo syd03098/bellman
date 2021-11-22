@@ -8,7 +8,7 @@ type ItemProps = {
 const Item = ({ emoji, children, ...props }: ItemProps): JSX.Element => {
   return (
     <StyledItem {...props}>
-      <Emoji>{emoji}</Emoji>
+      <Emoji>{emoji ?? "🤔"}</Emoji>
       <Divider />
       <Right>{children}</Right>
     </StyledItem>
