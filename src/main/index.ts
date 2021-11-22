@@ -27,9 +27,13 @@ const createWindow = async () => {
   });
 
   tray = new Tray(
-    nativeImage.createFromPath(path.resolve(__dirname, "./public/app-icon.png"))
+    process.platform === "win32"
+      ? nativeImage.createFromPath(
+          path.resolve(__dirname, "./public/app-icon.png")
+        )
+      : nativeImage.createEmpty()
   );
-  tray.setTitle("bellman");
+  tray.setTitle("Bellman");
   tray.on("double-click", () => {
     if (window === null) {
       return;
