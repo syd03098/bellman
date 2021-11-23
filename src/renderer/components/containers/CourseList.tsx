@@ -25,15 +25,18 @@ const CourseList = (): JSX.Element => {
 
   return (
     <Contents>
-      {courses.map((course) => (
-        <Item
-          key={course.id}
-          emoji={ExerciseEmoji[course.exercise]}
-          onClick={() => openEditOptions(course)}
-        >
-          {course.exerciseName} ({course.repeat}회)
-        </Item>
-      ))}
+      {courses.map((course) => {
+        const text = `${course.exerciseName} (${course.repeat}회)`;
+        return (
+          <Item
+            key={course.id}
+            emoji={ExerciseEmoji[course.exercise]}
+            onClick={() => openEditOptions(course)}
+          >
+            <Text>{text}</Text>
+          </Item>
+        );
+      })}
     </Contents>
   );
 };
@@ -42,6 +45,14 @@ const Contents = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+`;
+
+const Text = styled.p`
+  font-size: 14px;
+  width: 100%;
+  text-align: left;
+  color: ${({ theme }) => theme.text.plain};
+  margin: 0;
 `;
 
 export default CourseList;
