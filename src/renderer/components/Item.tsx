@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes, memo, PropsWithChildren } from "react";
 import styled from "styled-components";
 
-type ItemProps = {
+export type ItemProps = {
   emoji?: string;
 } & PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>;
 
@@ -49,9 +49,6 @@ const Right = styled.div`
   align-items: center;
   justify-content: flex-start;
   flex: 1 1 auto;
-  text-align: left;
-  color: ${({ theme }) => theme.text.plain};
-  font-size: 14px;
 `;
 
 export default memo(Item);

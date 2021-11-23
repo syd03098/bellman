@@ -1,11 +1,9 @@
 import React, { useMemo } from "react";
 import { ExerciseEmoji, Sigh } from "@library/emoji";
-import { getDateFromNow } from "@library/utils";
 import { useAppContext } from "@components/Context";
-import { ExerciseName } from "@library/settings/exercise";
 import { CssPropsType } from "@library/global";
 import styled, { css } from "styled-components";
-import Item from "@components/Item";
+import PersonalLog from "@components/PersonalLog";
 
 interface Props {
   cssProps: CssPropsType;
@@ -42,27 +40,14 @@ const MainRoute = ({ cssProps: cssFlexFull }: Props): JSX.Element => {
     <section css={cssFlexFull}>
       <Title>Personal Logs 🔥</Title>
       <Scroll>
-        {results.map((result) => {
-          const summary = (
-            <>
-              {ExerciseName[result.exercise]}&nbsp;
-              <span>{getDateFromNow(result.date)}</span>
-            </>
-          );
-
-          return (
-            <Item
-              key={result.date}
-              emoji={ExerciseEmoji[result.exercise]}
-              disabled
-            >
-              <Contents>{summary}</Contents>
-              <Right title={result.hadSucceeded ? "성공" : "에러"}>
-                {result.hadSucceeded ? "✔" : "❓"}
-              </Right>
-            </Item>
-          );
-        })}
+        {results.map((result) => (
+          <PersonalLog
+            key={result.date}
+            emoji={ExerciseEmoji[result.exercise]}
+            result={result}
+            disabled
+          />
+        ))}
       </Scroll>
     </section>
   );
