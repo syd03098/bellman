@@ -2,11 +2,12 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
+const isDevelopment = process.env.NODE_ENV === "development";
+
 module.exports = {
   target: "electron-renderer",
-  devtool: "inline-source-map",
-
-  mode: "development",
+  devtool: isDevelopment ? "inline-source-map" : undefined,
+  mode: isDevelopment ? "development" : "production",
 
   entry: {
     main: path.resolve(__dirname, "src/renderer/routes/index.tsx"),
