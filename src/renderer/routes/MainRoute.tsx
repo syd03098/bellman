@@ -65,7 +65,7 @@ const Title = styled.h1`
 const Scroll = styled.div`
   display: flex;
   flex-direction: column;
-  max-height: 348px;
+  max-height: 332px;
   overflow-y: auto;
   gap: 8px;
 
@@ -81,26 +81,6 @@ const Scroll = styled.div`
     border-radius: 16px;
     background-color: ${({ theme }) => theme.text.smoke};
   }
-`;
-
-const Contents = styled.div`
-  flex: 1 1 auto;
-  margin: 0;
-
-  span {
-    color: ${({ theme }) => theme.text.smoke};
-    font-size: 12px;
-    letter-spacing: -0.3px;
-  }
-`;
-
-const Right = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  width: 24px;
-  height: 100%;
 `;
 
 const Emoji = styled.h2`
