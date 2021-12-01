@@ -24,7 +24,7 @@ function fetchResults() {
   const fetched: Result[] = loadStorage(StorageKeys.Results);
 
   return fetched.length > 0
-    ? fetched.sort((a, b) => b.date - a.date).filter((_, num) => num < 12)
+    ? fetched.sort((a, b) => b.date - a.date).filter((_, num) => num < 18)
     : [];
 }
 
