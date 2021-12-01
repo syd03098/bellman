@@ -24,11 +24,15 @@ const CoursePopover = (): JSX.Element => {
 
   const onSubmit = useCallback(
     (submitted: ExerciseSubmitType) => {
-      pushCourse(submitted);
+      if (courses.some((course) => course.exercise === submitted.exercise)) {
+        props.hide();
+        return;
+      }
 
+      pushCourse(submitted);
       props.hide();
     },
-    [props, pushCourse]
+    [courses, props, pushCourse]
   );
 
   return (
@@ -42,7 +46,7 @@ const CoursePopover = (): JSX.Element => {
           onSubmitHandler={onSubmit}
           buttonMessage="Add Course"
           disclosure={
-            <Button disabled={courses.length !== 0}>
+            <Button>
               <PlusIcon size={24} />
             </Button>
           }
