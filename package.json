@@ -12,7 +12,7 @@
     "dev:main": "cross-env NODE_ENV=development node electron-dev.js",
     "build:renderer": "cross-env NODE_ENV=production webpack-cli --config webpack.renderer.config.js",
     "build:main": "cross-env NODE_ENV=production webpack-cli --config webpack.main.config.js",
-    "release": "node build.js"
+    "release": "node script/package.js"
   },
   "dependencies": {
     "date-fns": "^2.25.0",
