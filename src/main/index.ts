@@ -1,6 +1,7 @@
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from "electron";
 import path from "path";
+import { app, BrowserWindow, ipcMain, Menu, Tray } from "electron";
 import { askBeforeApplicationQuit, QuitResponse } from "./dialog";
+import createTrayService from "./trayService";
 import createCanvasWindow from "./canvas";
 
 // avoid garbage collection
@@ -9,16 +10,38 @@ let tray: Tray | null = null;
 
 // Single instance lock. avoid more than one window
 const gotTheLock = app.requestSingleInstanceLock();
-
-export const getRootWindow = () => {
-  return window ?? null;
-};
+const isDevelopment = process.env.NODE_ENV === "development";
 
 const createWindow = async () => {
+  initializeRootWindow();
+  tray = createTrayService(window);
+
+  const fileUrl = path.resolve(__dirname, "index.html");
+  await window?.loadFile(fileUrl);
+
+  ipcMain.on("open-edit-options", (event, args) => {
+    const menu = Menu.buildFromTemplate([
+      {
+        label: "삭제",
+        type: "normal",
+        click: (): void => window?.webContents.send("delete-course", args),
+      },
+    ]);
+
+    menu.popup();
+  });
+
+  ipcMain.handle("open-external-canvas", async () => {
+    await createCanvasWindow(window);
+  });
+};
+
+function initializeRootWindow() {
   window = new BrowserWindow({
     width: 320,
     height: 480,
-    maximizable: false,
+    maximizable: isDevelopment,
+    resizable: isDevelopment,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -26,30 +49,12 @@ const createWindow = async () => {
     },
   });
 
-  tray = new Tray(
-    process.platform === "win32"
-      ? nativeImage.createFromPath(
-          path.resolve(__dirname, "./public/app-icon.png")
-        )
-      : nativeImage.createEmpty()
-  );
-  tray.setTitle("Bellman");
-  tray.on("double-click", () => {
-    if (window === null) {
-      return;
-    }
-
-    window?.show();
-  });
-
-  await window.loadFile("index.html");
-
   window.on("blur", () => {
-    if (process.env.NODE_ENV === "development") {
+    if (!window) {
       return;
     }
 
-    window?.hide();
+    window.hide();
   });
 
   window.on("close", (event) => {
@@ -67,23 +72,7 @@ const createWindow = async () => {
   window.on("closed", () => {
     window = null;
   });
-
-  ipcMain.on("open-edit-options", (event, args) => {
-    const menu = Menu.buildFromTemplate([
-      {
-        label: "삭제",
-        type: "normal",
-        click: (): void => window?.webContents.send("delete-course", args),
-      },
-    ]);
-
-    menu.popup();
-  });
-
-  ipcMain.handle("open-external-canvas", async () => {
-    await createCanvasWindow();
-  });
-};
+}
 
 if (!gotTheLock) {
   app.exit();
@@ -104,5 +93,3 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
-
-export default { getRootWindow };
