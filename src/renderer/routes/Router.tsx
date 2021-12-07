@@ -1,12 +1,10 @@
 import React from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { flexSpaceBetween } from "@library/styleFunctions";
-import { useAppContext } from "@components/Context";
 import { CssPropsType } from "@library/global";
 import { css } from "styled-components";
 import SettingsRouteComponent from "@routes/SettingsRoute";
 import MainRouteComponent from "@routes/MainRoute";
-import useIpcListener from "@hooks/useIpcListener";
 import GlobalStyles from "@components/GlobalStyles";
 import SubToolbar from "@components/containers/SubToolbar";
 import TopNavbar from "@components/containers/TopNavbar";
@@ -16,13 +14,6 @@ interface Props {
 }
 
 const Router = ({ cssProps: cssFlexColumn }: Props): JSX.Element => {
-  const { updateResults } = useAppContext();
-
-  useIpcListener({
-    channel: "canvas-closed",
-    handler: updateResults,
-  });
-
   return (
     <HashRouter>
       <GlobalStyles />

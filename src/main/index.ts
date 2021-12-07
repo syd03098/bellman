@@ -31,8 +31,8 @@ const createWindow = async () => {
     menu.popup();
   });
 
-  ipcMain.handle("open-external-canvas", async () => {
-    await createCanvasWindow(window);
+  ipcMain.handle("open-external-canvas", async (event, restart = false) => {
+    await createCanvasWindow(window, restart);
   });
 };
 
@@ -50,7 +50,7 @@ function initializeRootWindow() {
   });
 
   window.on("blur", () => {
-    if (!window) {
+    if (!window || isDevelopment) {
       return;
     }
 
