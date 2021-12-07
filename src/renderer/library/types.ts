@@ -11,11 +11,6 @@ import { Settings } from "@library/settings";
 import { Result } from "@library/settings/reulsts";
 
 export interface AppStates {
-  // programStatus: Status;
-  programStatus: ProgramStatus;
-  setProgramStatus: Dispatch<SetStateAction<ProgramStatus>>;
-  toggleTimeout: () => void;
-
   // settings;
   interval: Nullable<number>;
   courses: ExerciseCourse[];

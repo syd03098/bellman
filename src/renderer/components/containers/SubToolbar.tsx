@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo } from "react";
 import { useAppContext } from "@components/Context";
 import { CssPropsType } from "@library/global";
-import { ProgramStatus } from "@library/program";
 import { Group } from "reakit/Group";
+import ReactCountdown, { CountdownRenderProps } from "react-countdown";
+import styled, { css, useTheme } from "styled-components";
+import useIpcListener from "@hooks/useIpcListener";
 import Spinner from "@components/Spinner";
 import Button from "@components/button";
-import styled, { css, useTheme } from "styled-components";
 
 interface Props {
   cssProps: CssPropsType;
@@ -14,9 +15,10 @@ interface Props {
 const { openExternalCanvas } = window.electronOnly;
 
 const SubToolbar = ({ cssProps: cssFlexEnd }: Props): JSX.Element => {
+  const { courses, interval, updateResults } = useAppContext();
   const theme = useTheme();
-  const { courses, interval } = useAppContext();
 
+  const date = interval ? Date.now() + interval * 60 * 1000 : Date.now();
   const disabled = useMemo(
     () => courses.length === 0 || interval === null,
     [courses, interval]
@@ -32,56 +34,78 @@ const SubToolbar = ({ cssProps: cssFlexEnd }: Props): JSX.Element => {
         padding: 0 12px;
       `}
     >
-      <ButtonsGroup aria-label="Buttons">
-        <Buttons disabled={disabled} />
-      </ButtonsGroup>
+      <ReactCountdown
+        date={date}
+        autoStart={false}
+        onComplete={() => openExternalCanvas(true)}
+        renderer={(props) => (
+          <CountdownButtons
+            disabled={disabled}
+            onUpdateResults={updateResults}
+            {...props}
+          />
+        )}
+      />
     </section>
   );
 };
 
-const Buttons = ({ disabled }: { disabled: boolean }): JSX.Element => {
-  const {
-    programStatus: status,
-    setProgramStatus,
-    toggleTimeout,
-  } = useAppContext();
+type CountdownButtonsProps = {
+  onUpdateResults: () => void;
+  disabled?: boolean;
+} & CountdownRenderProps;
 
-  const executeCanvas = useCallback(async () => {
-    setProgramStatus(ProgramStatus.StartNow);
-    await openExternalCanvas();
-  }, [setProgramStatus]);
+const CountdownButtons = ({
+  disabled,
+  onUpdateResults,
+  ...props
+}: CountdownButtonsProps) => {
+  const { api: methods, completed } = props;
+  const { start, stop, isStopped, isStarted } = methods;
 
-  if (status === ProgramStatus.Stopped) {
-    return (
-      <>
-        <Button
-          variant="primary"
-          size="sm"
-          disabled={disabled}
-          onClick={executeCanvas}
-        >
-          Exercise now
-        </Button>
-        <Button
-          variant="smoke"
-          size="sm"
-          disabled={disabled}
-          onClick={toggleTimeout}
-        >
-          Start Timer
-        </Button>
-      </>
-    );
-  }
-  if (status === ProgramStatus.Running) {
-    return (
-      <Button variant="danger" size="sm" onClick={toggleTimeout}>
-        Stop Timer
-      </Button>
-    );
+  const onCanvasClosed = useCallback(
+    (restart: boolean) => {
+      onUpdateResults();
+
+      if (restart) {
+        start();
+      }
+    },
+    [onUpdateResults, start]
+  );
+
+  useIpcListener({
+    channel: "canvas-closed",
+    handler: onCanvasClosed,
+  });
+
+  if (completed) {
+    return <Spinner />;
   }
 
-  return <Spinner />;
+  return (
+    <ButtonsGroup aria-label="buttons to open canvas">
+      {isStarted() && (
+        <Button variant="danger" onClick={stop}>
+          타이머정지
+        </Button>
+      )}
+      {isStopped() && (
+        <>
+          <Button
+            variant="primary"
+            disabled={disabled}
+            onClick={() => openExternalCanvas()}
+          >
+            운동바로시작
+          </Button>
+          <Button variant="smoke" disabled={disabled} onClick={start}>
+            타이머시작
+          </Button>
+        </>
+      )}
+    </ButtonsGroup>
+  );
 };
 
 const ButtonsGroup = styled(Group)`

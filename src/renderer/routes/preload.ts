@@ -1,8 +1,8 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("electronOnly", {
-  openExternalCanvas: async (): Promise<void> =>
-    ipcRenderer.invoke("open-external-canvas"),
+  openExternalCanvas: async (restart?: boolean): Promise<void> =>
+    ipcRenderer.invoke("open-external-canvas", restart),
 
   openEditOptions: (args: any): void =>
     ipcRenderer.send("open-edit-options", args),
