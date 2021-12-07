@@ -24,6 +24,7 @@ function ReactSelect<T extends string | number>({
       <Select
         classNamePrefix="react_select"
         isSearchable={false}
+        placeholder="None"
         isClearable={false}
         isDisabled={disabled}
         options={options}
