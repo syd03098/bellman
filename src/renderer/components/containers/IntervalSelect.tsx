@@ -6,7 +6,7 @@ import { SelectOption } from "@components/select/types";
 import { css } from "styled-components";
 import ReactSelect from "@components/select";
 
-const IntervalSelectSection = (): JSX.Element => {
+const IntervalSelect = (): JSX.Element => {
   const { setSettings, intervalOptions, interval } = useAppContext();
   const selectProps = useMenuState({ placement: "bottom-end" });
 
@@ -56,4 +56,4 @@ const IntervalSelectSection = (): JSX.Element => {
   );
 };
 
-export default IntervalSelectSection;
+export default IntervalSelect;

@@ -1,8 +1,8 @@
 import React from "react";
 import { CssPropsType } from "@library/global";
-import IntervalSelectSection from "@components/containers/IntervalSelectSection";
-import ToggleSoundSection from "@components/containers/ToggleSoundSection";
+import IntervalSelect from "@components/containers/IntervalSelect";
 import CoursePopover from "@components/containers/CoursePopover";
+import ToggleSound from "@components/containers/ToggleSound";
 
 interface Props {
   cssProps: CssPropsType;
@@ -11,8 +11,8 @@ interface Props {
 const SettingsRoute = ({ cssProps: cssFlexFull }: Props): JSX.Element => {
   return (
     <section css={cssFlexFull}>
-      <IntervalSelectSection />
-      <ToggleSoundSection />
+      <IntervalSelect />
+      <ToggleSound />
       <CoursePopover />
     </section>
   );
