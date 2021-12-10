@@ -4,8 +4,7 @@
 * `electron-builder` 로 빌드
 * `React` `Typescript` `Reakit` `styled-components`
 * 재택근무자를 위한 스트레칭 & 운동 유도 어플리케이션
-  * 현재는 숨쉬기 운동, 간단한 스쿼트, 옆구리 운동을 지원하고있어요!
-
+  * 현재는 숨쉬기 운동, 간단한 스쿼트, 옆구리 운동을 지원하고있어요! 
 * Scripts
   * `npm run build:renderer` : React 엔트리 포인트와 `preload.js`를 production 환경에서 빌드합니다.
   * `npm run build:main`: main 프로세스의 엔트리포인트 `index.js`를 production 환경에서 빌드합니다.
@@ -13,6 +12,8 @@
   <br />
   
 > darwin(macos), win32(windows) 환경에서만 바이너리 파일을 빌드할 수 있어요.
+
+> ❗ 내장 웹캠, 외부 웹캠에 대한 권한이 필요합니다!
 
 ## Bellman-canvas 
   * `mediapipe`기반으로 제작 
