@@ -4,7 +4,7 @@ import { useAppContext } from "@components/Context";
 import { css } from "styled-components";
 import Checkbox from "@components/Checkbox";
 
-const ToggleSoundSection = (): JSX.Element => {
+const ToggleSound = (): JSX.Element => {
   const { setSettings, playSound } = useAppContext();
 
   const onChange = useCallback(() => {
@@ -26,4 +26,4 @@ const ToggleSoundSection = (): JSX.Element => {
   );
 };
 
-export default ToggleSoundSection;
+export default ToggleSound;
