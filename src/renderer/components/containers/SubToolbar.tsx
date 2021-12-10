@@ -19,7 +19,7 @@ const SubToolbar = ({ cssProps: cssFlexEnd }: Props): JSX.Element => {
   const theme = useTheme();
 
   const date = interval ? Date.now() + interval * 60 * 1000 : Date.now();
-  const disabled = useMemo(
+  const timerDisabled = useMemo(
     () => courses.length === 0 || interval === null,
     [courses, interval]
   );
@@ -40,7 +40,8 @@ const SubToolbar = ({ cssProps: cssFlexEnd }: Props): JSX.Element => {
         onComplete={() => openExternalCanvas(true)}
         renderer={(props) => (
           <CountdownButtons
-            disabled={disabled}
+            startNowDisabled={timerDisabled}
+            timerDisabled={courses.length === 0}
             onUpdateResults={updateResults}
             {...props}
           />
@@ -52,12 +53,14 @@ const SubToolbar = ({ cssProps: cssFlexEnd }: Props): JSX.Element => {
 
 type CountdownButtonsProps = {
   onUpdateResults: () => void;
-  disabled?: boolean;
+  startNowDisabled: boolean;
+  timerDisabled: boolean;
 } & CountdownRenderProps;
 
 const CountdownButtons = ({
-  disabled,
   onUpdateResults,
+  startNowDisabled,
+  timerDisabled,
   ...props
 }: CountdownButtonsProps) => {
   const { api: methods, completed } = props;
@@ -94,12 +97,12 @@ const CountdownButtons = ({
         <>
           <Button
             variant="primary"
-            disabled={disabled}
+            disabled={startNowDisabled}
             onClick={() => openExternalCanvas()}
           >
             운동바로시작
           </Button>
-          <Button variant="smoke" disabled={disabled} onClick={start}>
+          <Button variant="smoke" disabled={timerDisabled} onClick={start}>
             타이머시작
           </Button>
         </>
