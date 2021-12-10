@@ -1,7 +1,13 @@
 import path from "path";
-import { app, BrowserWindow, ipcMain, Menu, Tray } from "electron";
-import { askBeforeApplicationQuit, QuitResponse } from "./dialog";
-import createTrayService from "./trayService";
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  nativeImage,
+  Tray,
+  dialog,
+} from "electron";
 import createCanvasWindow from "./canvas";
 
 // avoid garbage collection
@@ -14,7 +20,7 @@ const isDevelopment = process.env.NODE_ENV === "development";
 
 const createWindow = async () => {
   initializeRootWindow();
-  tray = createTrayService(window);
+  createTrayService();
 
   const fileUrl = path.resolve(__dirname, "index.html");
   await window?.loadFile(fileUrl);
@@ -57,20 +63,42 @@ function initializeRootWindow() {
     window.hide();
   });
 
-  window.on("close", (event) => {
+  window.on("close", async (e) => {
     if (!window) {
       return;
     }
 
-    const response = askBeforeApplicationQuit(window);
+    e.preventDefault();
 
-    if (response === QuitResponse.No) {
-      event.preventDefault();
+    const { response } = await dialog.showMessageBox(window, {
+      type: "warning",
+      buttons: ["Yes", "No"],
+      title: "Quit",
+      cancelId: 1,
+      message: "프로그램을 종료하시겠습니까?",
+    });
+
+    if (response === 0) {
+      window.destroy();
+      tray?.destroy();
+
+      app.quit();
     }
   });
+}
 
-  window.on("closed", () => {
-    window = null;
+function createTrayService() {
+  const iconPath = path.resolve(__dirname, "./public/app-icon.png");
+  const image =
+    process.platform === "win32"
+      ? nativeImage.createFromPath(iconPath)
+      : nativeImage.createEmpty();
+
+  tray = new Tray(image);
+  tray.setTitle("Bellman");
+  tray.setToolTip("Bellman: UOS Computer Science 2021");
+  tray.on("double-click", () => {
+    window?.show();
   });
 }
 
