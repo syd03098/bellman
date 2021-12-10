@@ -1,11 +1,10 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useState } from "react";
+import ReactCountdown, { CountdownRenderProps } from "react-countdown";
+import styled, { css, useTheme } from "styled-components";
 import { useAppContext } from "@components/Context";
 import { CssPropsType } from "@library/global";
 import { Group } from "reakit/Group";
-import ReactCountdown, { CountdownRenderProps } from "react-countdown";
-import styled, { css, useTheme } from "styled-components";
 import useIpcListener from "@hooks/useIpcListener";
-import Spinner from "@components/Spinner";
 import Button from "@components/button";
 
 interface Props {
@@ -15,14 +14,16 @@ interface Props {
 const { openExternalCanvas } = window.electronOnly;
 
 const SubToolbar = ({ cssProps: cssFlexEnd }: Props): JSX.Element => {
+  const [canvasOpened, setOpened] = useState<boolean>(false);
   const { courses, interval, updateResults } = useAppContext();
   const theme = useTheme();
 
   const date = interval ? Date.now() + interval * 60 * 1000 : Date.now();
-  const timerDisabled = useMemo(
-    () => courses.length === 0 || interval === null,
-    [courses, interval]
-  );
+
+  const onCanvasClosed = useCallback(() => {
+    updateResults();
+    setOpened(false);
+  }, [updateResults]);
 
   return (
     <section
@@ -37,12 +38,18 @@ const SubToolbar = ({ cssProps: cssFlexEnd }: Props): JSX.Element => {
       <ReactCountdown
         date={date}
         autoStart={false}
-        onComplete={() => openExternalCanvas(true)}
+        onComplete={async () => {
+          await openExternalCanvas(true);
+          setOpened(true);
+        }}
         renderer={(props) => (
           <CountdownButtons
-            startNowDisabled={timerDisabled}
-            timerDisabled={courses.length === 0}
-            onUpdateResults={updateResults}
+            isTimerDisabled={
+              canvasOpened || courses.length === 0 || interval === null
+            }
+            isStartNowDisabled={canvasOpened || courses.length === 0}
+            onCloseCanvas={onCanvasClosed}
+            onOpenCanvas={() => setOpened(true)}
             {...props}
           />
         )}
@@ -52,29 +59,31 @@ const SubToolbar = ({ cssProps: cssFlexEnd }: Props): JSX.Element => {
 };
 
 type CountdownButtonsProps = {
-  onUpdateResults: () => void;
-  startNowDisabled: boolean;
-  timerDisabled: boolean;
+  onCloseCanvas: () => void;
+  onOpenCanvas: () => void;
+  isTimerDisabled: boolean;
+  isStartNowDisabled: boolean;
 } & CountdownRenderProps;
 
 const CountdownButtons = ({
-  onUpdateResults,
-  startNowDisabled,
-  timerDisabled,
+  onCloseCanvas,
+  onOpenCanvas,
+  isStartNowDisabled,
+  isTimerDisabled,
   ...props
 }: CountdownButtonsProps) => {
-  const { api: methods, completed } = props;
-  const { start, stop, isStopped, isStarted } = methods;
+  const { api } = props;
+  const { start, stop, isStarted } = api;
 
   const onCanvasClosed = useCallback(
     (restart: boolean) => {
-      onUpdateResults();
+      onCloseCanvas();
 
       if (restart) {
         start();
       }
     },
-    [onUpdateResults, start]
+    [onCloseCanvas, start]
   );
 
   useIpcListener({
@@ -82,27 +91,37 @@ const CountdownButtons = ({
     handler: onCanvasClosed,
   });
 
-  if (completed) {
-    return <Spinner />;
-  }
+  const handleOpenCanvasNow = useCallback(async () => {
+    await openExternalCanvas();
+    onOpenCanvas();
+  }, [onOpenCanvas]);
+
+  const handleSetTimeout = useCallback(() => {
+    start();
+    onOpenCanvas();
+  }, [onOpenCanvas, start]);
 
   return (
-    <ButtonsGroup aria-label="buttons to open canvas">
+    <ButtonsGroup aria-label="buttons to control canvas">
       {isStarted() && (
         <Button variant="danger" onClick={stop}>
           타이머정지
         </Button>
       )}
-      {isStopped() && (
+      {!isStarted() && (
         <>
           <Button
             variant="primary"
-            disabled={startNowDisabled}
-            onClick={() => openExternalCanvas()}
+            disabled={isStartNowDisabled}
+            onClick={handleOpenCanvasNow}
           >
             운동바로시작
           </Button>
-          <Button variant="smoke" disabled={timerDisabled} onClick={start}>
+          <Button
+            variant="smoke"
+            disabled={isTimerDisabled}
+            onClick={handleSetTimeout}
+          >
             타이머시작
           </Button>
         </>
